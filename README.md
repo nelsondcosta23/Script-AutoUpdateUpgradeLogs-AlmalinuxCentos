@@ -27,6 +27,7 @@ This script automates system maintenance for **AlmaLinux 9** by:
 sudo dnf install -y epel-release
 sudo dnf update -y
 sudo dnf install -y msmtp sharutils dnf-utils
+```
 
 ## 📨 2. Configure `msmtp`
 
@@ -34,7 +35,9 @@ Create the configuration file:
 
 ```bash
 nano ~/.msmtprc
-
+```
+Create the configuration file:
+```
 defaults
 auth           on
 tls            on
@@ -50,11 +53,12 @@ user           your-gmail-account@gmail.com
 password       your_app_password
 
 account default : gmail
-
-
-
+```
+Create the configuration file:
+```
 chmod 600 ~/.msmtprc
-
-
+```
+Create the configuration file:
+```
 echo -e "To: your_email@example.com\nFrom: noreply@demo.com\nSubject: MSMTP Test\n\nThis is a test email." | msmtp --debug your_email@example.com
-
+```

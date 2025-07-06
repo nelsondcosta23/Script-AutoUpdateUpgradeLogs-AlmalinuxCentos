@@ -1,18 +1,44 @@
 #!/bin/bash
 
-# Configuration
+# Get the directory where this script is located
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+LOG_DIR="$BASE_DIR/logs"
 TIMESTAMP=$(date +"%M-%H-%d-%m-%Y")
-LOG_DIR="/root/logs"
 LOG_FILE="$LOG_DIR/update_upgrade_$TIMESTAMP.log"
+TMPMAIL="/tmp/mail_$TIMESTAMP.txt"
+
 EMAIL="your_email@example.com"
 SUBJECT="System Update Report - $TIMESTAMP"
 HOSTNAME=$(hostname)
-TMPMAIL="/tmp/mail_$TIMESTAMP.txt"
 
-# Create log directory if it doesn't exist
+# Ensure logs directory exists
 mkdir -p "$LOG_DIR"
 
-# Start logging
+# Check if updates are available
+AVAILABLE_UPDATES=$(dnf check-update --quiet; echo $?)
+if [ "$AVAILABLE_UPDATES" -ne 100 ]; then
+    STATUS="NOTHING TO UPDATE"
+    {
+        echo "===== System Update Report for $HOSTNAME ====="
+        echo "Date: $(date)"
+        echo "----------------------------------------------"
+        echo "No updates available. System is up to date."
+    } > "$LOG_FILE"
+
+    {
+        echo "To: $EMAIL"
+        echo "From: noreply@demo.com"
+        echo "Subject: $SUBJECT - $STATUS"
+        echo ""
+        cat "$LOG_FILE"
+    } > "$TMPMAIL"
+
+    cat "$TMPMAIL" | msmtp "$EMAIL"
+    rm -f "$TMPMAIL"
+    exit 0
+fi
+
+# Run the update process
 {
     echo "===== System Update Report for $HOSTNAME ====="
     echo "Date: $(date)"
@@ -41,7 +67,7 @@ mkdir -p "$LOG_DIR"
     echo "Errors occurred during the execution." >> "$LOG_FILE"
 }
 
-# Build the email message
+# Build and send the email
 {
     echo "To: $EMAIL"
     echo "From: noreply@demo.com"
@@ -50,13 +76,10 @@ mkdir -p "$LOG_DIR"
     cat "$LOG_FILE"
 } > "$TMPMAIL"
 
-# Send the email
 cat "$TMPMAIL" | msmtp "$EMAIL"
-
-# Remove temporary mail file
 rm -f "$TMPMAIL"
 
-# Reboot if required
+# Reboot if needed
 if [ "$REBOOT_REQUIRED" = true ]; then
     sudo reboot
 fi
