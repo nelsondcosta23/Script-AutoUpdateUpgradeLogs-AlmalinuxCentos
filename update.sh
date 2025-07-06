@@ -6,7 +6,7 @@ TIMESTAMP=$(date +"%M-%H-%d-%m-%Y")
 LOG_FILE="$LOG_DIR/update_upgrade_$TIMESTAMP.log"
 TMPMAIL="/tmp/mail_$TIMESTAMP.txt"
 
-EMAIL="nelsonfilipecosta@gmail.com"
+EMAIL="your@email.com"
 SUBJECT="System Update Report - $TIMESTAMP"
 HOSTNAME=$(hostname)
 
