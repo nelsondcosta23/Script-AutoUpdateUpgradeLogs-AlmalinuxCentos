@@ -23,7 +23,8 @@ echo "Date: $(date)" >> "$LOG_FILE"
 echo "----------------------------------------------" >> "$LOG_FILE"
 
 # Check if updates are available
-AVAILABLE_UPDATES=$(dnf check-update --quiet; echo $?)
+dnf check-update --quiet > /dev/null 2>&1
+AVAILABLE_UPDATES=$?
 if [ "$AVAILABLE_UPDATES" -ne 100 ]; then
     STATUS="NOTHING TO UPDATE"
     echo "No updates available. System is up to date." >> "$LOG_FILE"
