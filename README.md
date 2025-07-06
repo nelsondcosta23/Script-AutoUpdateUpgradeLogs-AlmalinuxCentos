@@ -36,8 +36,9 @@ Create the configuration file:
 ```bash
 nano ~/.msmtprc
 ```
-Create the configuration file:
-```
+
+Update the configuration file to your email data:
+```bash
 defaults
 auth           on
 tls            on
@@ -54,11 +55,13 @@ password       your_app_password
 
 account default : gmail
 ```
-Create the configuration file:
-```
+
+Give premission to nsmtprc file:
+```bash
 chmod 600 ~/.msmtprc
 ```
-Create the configuration file:
-```
+
+Test if service its working, don't forget the change the To: and From:
+```bash
 echo -e "To: your_email@example.com\nFrom: noreply@demo.com\nSubject: MSMTP Test\n\nThis is a test email." | msmtp --debug your_email@example.com
 ```
