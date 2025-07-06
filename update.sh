@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Get the directory where this script is located
 BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
 LOG_DIR="$BASE_DIR/logs"
 TIMESTAMP=$(date +"%M-%H-%d-%m-%Y")
@@ -11,13 +10,10 @@ EMAIL="nelsonfilipecosta@gmail.com"
 SUBJECT="System Update Report - $TIMESTAMP"
 HOSTNAME=$(hostname)
 
-# Ensure logs directory exists
 mkdir -p "$LOG_DIR"
 
-# Initialize reboot flag
 REBOOT_REQUIRED=false
 
-# Start logging
 echo "===== System Update Report for $HOSTNAME =====" > "$LOG_FILE"
 echo "Date: $(date)" >> "$LOG_FILE"
 echo "----------------------------------------------" >> "$LOG_FILE"
@@ -54,7 +50,7 @@ else
     }
 fi
 
-# Build email message
+#Build the email
 {
     echo "To: $EMAIL"
     echo "From: noreply@demo.com"
@@ -70,7 +66,6 @@ else
     echo "[ERROR] Failed to send email to $EMAIL." >> "$LOG_FILE"
 fi
 
-# Clean up
 rm -f "$TMPMAIL"
 
 # Reboot if needed
